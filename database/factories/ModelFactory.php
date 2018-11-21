@@ -2,6 +2,7 @@
 
 use Faker\Generator as Faker;
 
+use App\Models\OneDayElectricity;
 use App\Models\OneHourElectricity;
 use App\Models\Panel;
 
@@ -28,6 +29,17 @@ $factory->define(OneHourElectricity::class, function (Faker $faker) {
     return [
         'panel_id' => $faker->randomDigit,
         'kilowatts' => $faker->randomDigit,
-        'hour' => $faker->dateTime
+        'hour' => \DateTime::createFromFormat('Y-m-d H:i:s', $faker->dateTime->format('Y-m-d H:00:00'))
+    ];
+});
+
+$factory->define(OneDayElectricity::class, function (Faker $faker) {
+    return [
+        'panel_id' => $faker->randomDigit,
+        'day'      => $faker->date,
+        'sum'      => $faker->randomDigit,
+        'min'      => $faker->randomDigit,
+        'max'      => $faker->randomDigit,
+        'average'  => $faker->randomDigit,
     ];
 });
