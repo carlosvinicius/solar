@@ -73,4 +73,49 @@ class OneHourElectricityTest extends TestCase
 
         $response->assertStatus(404);
     }
+
+    /**
+     * Test if valid electricity data are successfully saved
+     *
+     * @return void
+     */
+    public function testStoreSuccess()
+    {
+        $panel = factory(Panel::class)->make();
+        $panel->save();
+
+        $oneHourElectricity = factory(OneHourElectricity::class)->make();
+
+        $data = [
+            'panel_serial' => $panel->serial,
+            'kilowatts'    => $oneHourElectricity->kilowatts,
+            'hour'         => $oneHourElectricity->hour->format('Y-m-d H:00:00'),
+        ];
+
+        $response = $this->json('POST', '/api/one_hour_electricities', $data);
+
+        $response->assertStatus(201);
+    }
+
+    /**
+     *  Test if invalid electricity data are correctly criticized
+     *
+     * @return void
+     */
+    public function testStoreFailure()
+    {
+        $panel = factory(Panel::class)->make();
+        $panel->save();
+
+        $oneHourElectricity = factory(OneHourElectricity::class)->make();
+
+        $data = [
+            'panel_serial' => $panel->serial,
+            'hour'         => $oneHourElectricity->hour->format('Y-m-d H'),
+        ];
+
+        $response = $this->json('POST', '/api/one_hour_electricities', $data);
+
+        $response->assertStatus(422);
+    }
 }
