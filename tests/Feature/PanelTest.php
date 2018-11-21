@@ -19,9 +19,9 @@ class PanelTest extends TestCase
     public function testStoreSuccess()
     {
         $response = $this->json('POST', '/api/panels', [
-            'serial'    => 'abcdef012345678',
-            'longitude' => 0,
-            'latitude'  => 0
+            'serial'    => 'abcdef0123456789',
+            'longitude' => 25.000001,
+            'latitude'  => 26.000002
         ]);
 
         $response->assertStatus(201);
